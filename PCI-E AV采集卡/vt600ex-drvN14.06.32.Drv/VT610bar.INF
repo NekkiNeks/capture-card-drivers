@@ -1,0 +1,171 @@
+;;#############################################################################
+;;## vt600pcBAR.INF for Windows 98/ME/2000/XP WDM Drivers                    ##
+;;## Copyright @2000-2014 VTimage Inc.                                     ##
+;;## VT600pc WDM CrossBar Driver                                             ##
+;;#############################################################################
+
+[Version]
+signature="$CHICAGO$"
+;CatalogFile=vt88XBAR.CAT
+CatalogFile.ntx86=vt88xbar.cat
+Class=Media
+ClassGUID={4D36E96C-E325-11CE-BFC1-08002BE10318}
+Provider=%InfProvider%
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+DriverVer= 0/21/2014,13.0.50.0
+
+[ControlFlags]
+ExcludeFromSelect = STREAM\CX88XBar
+
+[DestinationDirs]
+;DefaultDestDir=10,system32\drivers
+CX88XBar.CopyDrivers=10,system32\drivers
+;TSCWDM.CopyApp=10, TSCTV
+;TSCWDM.DeleteApp=10, TSCTV
+
+[SourceDisksNames]
+1=%DiskId%,,,""
+
+[SourceDisksFiles]
+vt88XBar.SYS=1
+
+[Manufacturer]
+%Manufacture%=DeviceList, NTamd64
+
+[DeviceList.NTamd64]
+%CX88XBarDevice%=CX88XBar,STREAM\CX88XBar
+
+[DeviceList]
+%CX88XBarDevice%=CX88XBar,STREAM\CX88XBar
+
+[CX88XBar]
+Include   = KS.inf,Kscaptur.inf
+Needs     = KS.Registration,Kscaptur.Registration.NT
+AddReg    = CX88XBar.AddReg
+CopyFiles = CX88XBar.CopyDrivers
+
+;[CX88XBar]
+;Include   = KS.inf,Kscaptur.inf
+;Needs     = KS.Registration,Kscaptur.Registration.NT
+;AddReg    = CX88XBar.AddReg,TSCWDM.InstallApp
+;DelFiles  = TSCWDM.DelApp
+;CopyFiles = CX88XBar.CopyDrivers,TSCWDM.CopyApp
+
+[CX88XBar.CopyDrivers]
+vt88XBar.SYS
+
+[CX88XBar.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,vt88XBar.SYS
+HKR,,OkToHibernate,3,01
+HKR,,PageOutWhenUnopened,3,01
+
+HKR,"DriverData","LastVideoSource",            0x10001, 0x01, 0x00, 0x00, 0x00
+HKR,"DriverData","LastAudioSource",            0x10001, 0xFF, 0xFF, 0xFF, 0xFF
+HKR,"DriverData","AudioType",                  0x10001, 0x03, 0x00, 0x00, 0x00
+
+;Video SVideo
+HKR,"DriverData\InPin0","PinType",             0x10001, 0x03, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin0","RelatedPinIndex",     0x10001, 0x04, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin0","Medium",,%GUID_NULL%
+
+;Video Tuner
+HKR,"DriverData\InPin1","PinType",             0x10001, 0x01, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin1","RelatedPinIndex",     0x10001, 0x03, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin1","Medium",,%GUID_0%
+
+;Video Composite
+HKR,"DriverData\InPin2","PinType",             0x10001, 0x02, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin2","RelatedPinIndex",     0x10001, 0x04, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin2","Medium",,%GUID_NULL%
+
+;Audio Tuner
+HKR,"DriverData\InPin3","PinType",             0x10001, 0x00, 0x10, 0x00, 0x00
+HKR,"DriverData\InPin3","RelatedPinIndex",     0x10001, 0x01, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin3","Medium",,%GUID_3%
+
+;Audio Line-In
+HKR,"DriverData\InPin4","PinType",             0x10001, 0x01, 0x10, 0x00, 0x00
+HKR,"DriverData\InPin4","RelatedPinIndex",     0x10001, 0x02, 0x00, 0x00, 0x00
+HKR,"DriverData\InPin4","Medium",,%GUID_5%
+
+;Video Decoder
+HKR,"DriverData\OutPin0","PinType",            0x10001, 0x0C, 0x00, 0x00, 0x00
+HKR,"DriverData\OutPin0","RelatedPinIndex",    0x10001, 0x01, 0x00, 0x00, 0x00
+HKR,"DriverData\OutPin0","Medium",,%GUID_4%
+
+;Audio Decoder
+HKR,"DriverData\OutPin1","PinType",            0x10001, 0x09, 0x10, 0x00, 0x00
+HKR,"DriverData\OutPin1","RelatedPinIndex",    0x10001, 0x00, 0x00, 0x00, 0x00
+HKR,"DriverData\OutPin1","Medium",,%GUID_NULL%
+
+
+[CX88XBar.Services]
+AddService = CX88XBAR, 0x02, CX88XBar.ServiceInstall
+
+[CX88XBar.ServiceInstall]
+DisplayName   = %CX88XBarDevice%
+ServiceType   = %SERVICE_KERNEL_DRIVER%
+StartType     = %SERVICE_AUTO_START%
+ErrorControl  = %SERVICE_ERROR_NORMAL%
+ServiceBinary = %10%\system32\drivers\vt88XBar.SYS
+
+[CX88XBar.Interfaces]
+AddInterface={a799a801-a46d-11d0-a18c-00a02401dcd4},"GLOBAL",Crossbar,
+
+[Crossbar]
+AddReg=Crossbar.AddReg
+
+[Crossbar.AddReg]
+HKR,,CLSID,,{71F96460-78F3-11d0-A18C-00A0C9118956}
+HKR,,FriendlyName,,%CX88XBarName%
+
+
+;[TSCWDM.CopyApp]
+;SETUP.EXE   , APPWDM\SETUP.EXE
+;SETUP.INS   , APPWDM\SETUP.INS
+;SETUP.PKG   , APPWDM\SETUP.PKG
+;SETUP.INI   , APPWDM\SETUP.INI
+;_INST32I.EX_, APPWDM\_INST32I.EX_
+;_ISDEL.EXE  , APPWDM\_ISDEL.EXE
+;_SETUP.DLL  , APPWDM\_SETUP.DLL
+;_SETUP.LIB  , APPWDM\_SETUP.LIB
+;_SETUP.1    , APPWDM\_SETUP.1
+;DISK1.ID    , APPWDM\DISK1.ID
+
+
+;[TSCWDM.DeleteApp]
+;SETUP.INS
+;SETUP.EXE
+;SETUP.PKG
+;SETUP.INI
+;_INST32I.EX_
+;_ISDEL.EXE
+;_SETUP.DLL
+;_SETUP.LIB
+;_SETUP.1
+;DISK1.ID
+
+
+;[TSCWDM.InstallApp]
+;HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce,TSCTVINS,0,TSCTV\SETUP.EXE
+
+
+[Strings]
+InfProvider=    "ShenZhen VTImage Co., Ltd."
+Manufacture=    "ShenZhen VTImage Co., Ltd."
+DiskId=         "VT-600 card driver disk"
+CX88XBarName=   "10Moons SDK-2000 Crossbar"
+CX88XBarDevice= "VTimage, VT-600 WDM Crossbar"
+
+SERVICE_AUTO_START=2
+SERVICE_ERROR_NORMAL=1
+SERVICE_KERNEL_DRIVER=1
+
+GUID_0="{A19DC0E0-3B39-11D1-905F-0000C0CC16BA}"
+GUID_3="{A19DC0E3-3B39-11D1-905F-0000C0CC16BA}"
+GUID_4="{A19DC0E4-3B39-11D1-905F-0000C0CC16BA}"
+GUID_5="{A19DC0E5-3B39-11D1-905F-0000C0CC16BA}"
+GUID_NULL="{00000000-0000-0000-0000-000000000000}"
+
+

@@ -1,0 +1,284 @@
+;;#############################################################################
+;;## VT600.INF for Windows 98/ME/2000/XP WDM Drivers                         ##
+;;## Copyright @2000-2014 VTimage Inc.                                     ##
+;;## VTi VT-600 Series WDM Video Capture Driver                              ##
+;;#############################################################################
+
+[Version]
+Signature="$CHICAGO$"
+;CatalogFile=CX88VID.CAT
+Class=Media
+ClassGUID={4D36E96C-E325-11CE-BFC1-08002BE10318}
+Provider=%InfProvider%
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+DriverVer=10/21/2014,13.0.50.0
+
+[ControlFlags]
+ExcludeFromSelect=PCI\VEN_14F1&DEV_8800,\
+                  PCI\VEN_14F1&DEV_8801,\
+                  PCI\VEN_14F1&DEV_8802,\
+                  PCI\VEN_14F1&DEV_8803,\
+                  PCI\VEN_14F1&DEV_8804
+
+[DestinationDirs]
+;DefaultDestDir=10,system32\drivers
+CX88Vid.CopyDrivers=10,system32\drivers
+CX88Vid.CopyInf=10,Inf
+CX88Vid.CopyFilter=11
+
+[SourceDisksNames]
+1=%DiskId%,,,""
+
+[SourceDisksFiles]
+vt88Vid.SYS=1
+vt88XBar.SYS=1
+DItlYuY2.ax=1
+deinterlace.ax=1
+;;CodecInstall.exe=1
+
+[Manufacturer]
+%Manufacture%=DeviceList, NTamd64
+
+[DeviceList.NTamd64]
+%CX88VidDevice%=CX88Vid, PCI\VEN_14F1&DEV_8800&SUBSYS_45534E4F
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8801
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8802
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8803
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8804
+
+[DeviceList]
+%CX88VidDevice%=CX88Vid, PCI\VEN_14F1&DEV_8800&SUBSYS_45534E4F
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8801
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8802
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8803
+%CXUnuseDevice%=CXUnuse, PCI\VEN_14F1&DEV_8804
+
+[CXUnuse]
+AddReg    = CXUnuse.AddReg
+CopyFiles = CXUnuse.CopyDrivers
+
+[CXUnuse.AddReg]
+;HKR,,OkToHibernate,3,01
+
+[CXUnuse.CopyDrivers]
+;CX88Vid.SYS
+
+[CXUnuse.Services]
+AddService = , 0x02 ; Install nothing
+
+
+[CX88Vid]
+Include   = KS.inf, Kscaptur.inf, Ksfilter.inf
+Needs     = KS.Registration,Kscaptur.Registration.NT
+CopyFiles = CX88Vid.CopyDrivers,CX88Vid.CopyInf, CX88Vid.CopyFilter
+AddReg    = CX88Vid.AddReg,CX88Vid.AddStream,TSC_WDMext.AddReg,TSC_BTTV.AddReg, VTFILTER.DoReg
+
+[CX88Vid.AddReg]
+HKR,,DevLoader,,*NTKERN
+HKR,,NTMPDriver,,vt88Vid.SYS
+HKR,,OkToHibernate,3,01
+HKR,,PageOutWhenUnopened,3,00
+HKR,,DontSuspendIfStreamsAreRunning,3,01
+HKR,"DriverData","XBarInPin0",            0x00010001, 0x03, 0x00, 0x00, 0x00
+HKR,"DriverData","XBarInPin1",            0x00010001, 0x01, 0x00, 0x00, 0x00
+HKR,"DriverData","XBarInPin2",            0x00010001, 0x02, 0x00, 0x00, 0x00
+HKR,"DriverData","XBarInPin3",            0x00010001, 0x00, 0x10, 0x00, 0x00
+HKR,"DriverData","XTal0",                 0x00010001, 0x1C, 0x00, 0x00, 0x00
+HKR,"DriverData","XTal1",                 0x00010001, 0x23, 0x00, 0x00, 0x00
+HKR,"DriverData","BobMode",               0x00010001, 0x00, 0x00, 0x00, 0x00
+HKR,"DriverData","VideoStandard",         0x00010001, 0x20, 0x00, 0x00, 0x00
+HKR,"DriverData","WWAudioCountryCode",    0x00010001, 0x01, 0x00, 0x00, 0x00
+HKR,"DriverData","OddVDelay",             0x00010001, 0x1C, 0x00, 0x00, 0x00
+HKR,"DriverData","EvenVDelay",            0x00010001, 0x1C, 0x00, 0x00, 0x00
+HKR,"DriverData","OddVActive",            0x00010001, 0xe0, 0x01, 0x00, 0x00
+HKR,"DriverData","EvenVActive",           0x00010001, 0xe0, 0x01, 0x00, 0x00
+HKR,"DriverData","ColorKillEnable",       0x00010001, 0x01, 0x00, 0x00, 0x00
+HKR,"DriverData","Pll27",                 0x00010001, 0x00, 0x00, 0x00, 0x00
+
+
+[CX88Vid.CopyDrivers]
+vt88Vid.SYS
+vt88XBar.SYS
+
+[CX88Vid.CopyFilter]
+DItlYuY2.ax
+;;CodecInstall.exe
+deinterlace.ax
+
+[CX88Vid.CopyInf]
+;vt610.INF
+;vt610Bar.INF
+
+[CX88Vid.Interfaces]
+AddInterface={65e8773d-8f56-11d0-a3b9-00a0c9223196},"GLOBAL",CX88VidCapture,
+AddInterface={a799a802-a46d-11d0-a18c-00a02401dcd4},"GLOBAL",CX88VidTVAudio,
+
+[CX88Vid.Services]
+AddService = CX23880, 0x02, CX88Vid.ServiceInstall
+
+[CX88Vid.ServiceInstall]
+DisplayName   = %CX88VidDevice%
+ServiceType   = %SERVICE_KERNEL_DRIVER%
+StartType     = %SERVICE_AUTO_START%
+ErrorControl  = %SERVICE_ERROR_NORMAL%
+ServiceBinary = %10%\system32\drivers\vt88Vid.SYS
+
+[CX88Vid.AddStream]
+;HKR,"ENUM\Device1",pnpid,,"CX88Tune"
+HKR,"ENUM\Device2",pnpid,,"CX88XBar"
+
+[CX88VidCapture]
+AddReg=CX88VidCapture.AddReg
+
+[CX88VidCapture.AddReg]
+HKR,,CLSID,,{17CCA71B-ECD7-11D0-B908-00A0C9223196}
+HKR,,FriendlyName,,%CX88VidCapture%
+
+[CX88VidTVAudio]
+AddReg=CX88VidTVAudio.AddReg
+
+[CX88VidTVAudio.AddReg]
+HKR,,CLSID,,{71F96462-78F3-11d0-A18C-00A0C9118956}
+HKR,,FriendlyName,,%CX88VidTVAudio%
+
+[VTFILTER.DoReg]
+HKLM,Software\Microsoft\Windows\CurrentVersion\RunOnce,"DItlYuY2 filter...",,"%11%\regsvr32.exe /s %11%\DItlYuY2.ax"
+HKLM,Software\Microsoft\Windows\CurrentVersion\RunOnce,"deinterlace filter...",,"%11%\regsvr32.exe /s %11%\deinterlace.ax"
+;;;HKLM,Software\Microsoft\Windows\CurrentVersion\RunOnce,"CodeInstall...",,"%11%\CodecInstall.exe"
+
+[TSC_WDMext.AddReg]
+;******************************************************************************
+;TelSignal AddCodes : WDM extension
+;******************************************************************************
+;
+; WDM extension command information
+;
+HKLM,"Software\TelSignal\WDMTV", ,              0x00000, "TelSignal WDM extension"
+HKLM,"Software\TelSignal\WDMTV","TVfreq",       0x10001, 0x00, 0x00, 0x00, 0x00 ; Frequency
+HKLM,"Software\TelSignal\WDMTV","TVcfg",        0x10001, 0x00, 0x00, 0x00, 0x00 ; TVCFG
+HKLM,"Software\TelSignal\WDMTV","TVcmd",        0x10001, 0x00, 0x00, 0x00, 0x00 ; Command
+HKLM,"Software\TelSignal\WDMTV","TVparam",      0x10001, 0x00, 0x00, 0x00, 0x00 ; Parameter
+HKLM,"Software\TelSignal\WDMTV","TVresp",       0x10001, 0x00, 0x00, 0x00, 0x00 ; Response
+HKLM,"Software\TelSignal\WDMTV","TVstatus",     0x10001, 0x00, 0x00, 0x00, 0x00 ; Status
+
+[TSC_BTTV.AddReg]
+;
+; Conexant CX23880 WDM extension information
+;
+HKLM,"Software\TelSignal\CXTV",           ,     0x00000, "CXTV information"
+HKLM,"Software\TelSignal\CXTV","Copyright",     0x00000, "TelSignal Co., Ltd."
+HKLM,"Software\TelSignal\CXTV","Company",       0x00000, "MSI"
+HKLM,"Software\TelSignal\CXTV","Product",       0x00000, "MSI PVS"
+HKLM,"Software\TelSignal\CXTV","Function",      0x00000, "TV"
+;
+; TV capture card GPIO and I2C information
+;
+HKLM,"Software\TelSignal\CXTV","AgpioStart",    0x10001, 0x15, 0x00, 0x00, 0x00 ; ASwitch Start Bit
+HKLM,"Software\TelSignal\CXTV","AgpioEnd",      0x10001, 0x17, 0x00, 0x00, 0x00 ; ASwitch End   Bit
+HKLM,"Software\TelSignal\CXTV","AudioTV",       0x10001, 0x00, 0x00, 0x00, 0x00 ; Audio TV
+HKLM,"Software\TelSignal\CXTV","AudioFM",       0x10001, 0x01, 0x00, 0x00, 0x00 ; Audio FM
+HKLM,"Software\TelSignal\CXTV","AudioLine",     0x10001, 0x03, 0x00, 0x00, 0x00 ; Audio Line
+HKLM,"Software\TelSignal\CXTV","AudioNC",       0x10001, 0x03, 0x00, 0x00, 0x00 ; Audio NC
+HKLM,"Software\TelSignal\CXTV","AudioSW",       0x10001, 0x00, 0x00, 0x00, 0x00 ; Audio Switch
+HKLM,"Software\TelSignal\CXTV","AmutePin",      0x10001, 0x17, 0x00, 0x00, 0x00 ; Audio Mute   Pin
+HKLM,"Software\TelSignal\CXTV","AmuteOn",       0x10001, 0x01, 0x00, 0x00, 0x00 ; Audio Mute   Value
+HKLM,"Software\TelSignal\CXTV","AmuteOff",      0x10001, 0x00, 0x00, 0x00, 0x00 ; Audio Unmute Value
+HKLM,"Software\TelSignal\CXTV","AmuteStatus",   0x10001, 0x00, 0x00, 0x00, 0x00 ; Audio Mute   Status
+HKLM,"Software\TelSignal\CXTV","FmFreq",        0x10001, 0x00, 0x00, 0x00, 0x00 ; FM Frequency
+HKLM,"Software\TelSignal\CXTV","FmI2C",         0x10001, 0xC0, 0x00, 0x00, 0x00 ; FM I2C Address
+HKLM,"Software\TelSignal\CXTV","GPIE",          0x10001, 0x00, 0x00, 0x00, 0x00 ; GPIE
+HKLM,"Software\TelSignal\CXTV","GPOE",          0x10001, 0x0F, 0x00, 0xFC, 0x00 ; GPOE
+HKLM,"Software\TelSignal\CXTV","MTSioStart",    0x10001, 0x12, 0x00, 0x00, 0x00 ; MTS Start Bit
+HKLM,"Software\TelSignal\CXTV","MTSioEnd",      0x10001, 0x14, 0x00, 0x00, 0x00 ; MTS End   Bit
+HKLM,"Software\TelSignal\CXTV","MTSioMONO",     0x10001, 0x03, 0x00, 0x00, 0x00 ; MONO
+HKLM,"Software\TelSignal\CXTV","MTSioSAP",      0x10001, 0x04, 0x00, 0x00, 0x00 ; SAP
+HKLM,"Software\TelSignal\CXTV","MTSioST",       0x10001, 0x02, 0x00, 0x00, 0x00 ; STEREO
+HKLM,"Software\TelSignal\CXTV","MTSioSW",       0x10001, 0x00, 0x00, 0x00, 0x00 ; MTS Switch
+HKLM,"Software\TelSignal\CXTV","MTSspST",       0x10001, 0x00, 0x00, 0x00, 0x00 ; STEREO Signal Pin
+HKLM,"Software\TelSignal\CXTV","MTSspSAP",      0x10001, 0x00, 0x00, 0x00, 0x00 ; SAP    Signal Pin
+HKLM,"Software\TelSignal\CXTV","MTSsvST",       0x10001, 0x00, 0x00, 0x00, 0x00 ; STEREO Signal Value
+HKLM,"Software\TelSignal\CXTV","MTSsvSAP",      0x10001, 0x00, 0x00, 0x00, 0x00 ; SAP    Signal Value
+HKLM,"Software\TelSignal\CXTV","TunerI2C",      0x10001, 0xC0, 0x00, 0x00, 0x00 ; Tuner I2C Address
+HKLM,"Software\TelSignal\CXTV","TunerBrand",    0x10001, 0x80, 0x00, 0x00, 0x00 ; Tuner Brand
+HKLM,"Software\TelSignal\CXTV","VideoComposite",0x10001, 0x01, 0x00, 0x00, 0x00 ; Is Composite Available
+HKLM,"Software\TelSignal\CXTV","VideoSVideo",   0x10001, 0x01, 0x00, 0x00, 0x00 ; Is SVideo    Available
+HKLM,"Software\TelSignal\CXTV","VideoTuner",    0x10001, 0x01, 0x00, 0x00, 0x00 ; Is Tuner     Available
+HKLM,"Software\TelSignal\CXTV","VideoCamera",   0x10001, 0x00, 0x00, 0x00, 0x00 ; Is Camera    Available
+HKLM,"Software\TelSignal\CXTV","VideoQSCamera", 0x10001, 0x00, 0x00, 0x00, 0x00 ; Is Quartz Sight Camera
+;
+; The decoder must be GPIO type 0x0357, 0x0360, 0x0866 or 0x012C for I2C devices.
+;
+HKLM,"Software\TelSignal\CXTV","RemoteCode",    0x10001, 0x00, 0x00, 0x00, 0x00 ; Remote Code
+HKLM,"Software\TelSignal\CXTV","RemoteDecoder", 0x10001, 0x57, 0x03, 0x00, 0x00 ; Decoder Name
+HKLM,"Software\TelSignal\CXTV","RemoteI2C",     0x10001, 0x00, 0x00, 0x00, 0x00 ; I2C  Byte 1
+HKLM,"Software\TelSignal\CXTV","RemoteI2Cex",   0x10001, 0x00, 0x00, 0x00, 0x00 ; I2C  Byte 2
+HKLM,"Software\TelSignal\CXTV","RemoteStart",   0x10001, 0x08, 0x00, 0x00, 0x00 ; GPIO Start Bit
+HKLM,"Software\TelSignal\CXTV","RemoteEnd",     0x10001, 0x0C, 0x00, 0x00, 0x00 ; GPIO End   Bit
+HKLM,"Software\TelSignal\CXTV","RemoteReset",   0x10001, 0x0F, 0x00, 0x00, 0x00 ; GPIO Reset Pin
+HKLM,"Software\TelSignal\CXTV","RemoteRScode",  0x10001, 0x01, 0x00, 0x00, 0x00 ; GPIO Reset Value
+HKLM,"Software\TelSignal\CXTV","RemoteRSdelay", 0x10001, 0x05, 0x00, 0x00, 0x00 ; GPIO Reset Delay
+HKLM,"Software\TelSignal\CXTV","RemoteBitmap",  0x10001, 0x00, 0x00, 0x00, 0x00 ; GPIO Bitmapped
+HKLM,"Software\TelSignal\CXTV","RemoteBit0",    0x10001, 0x08, 0x00, 0x00, 0x00 ; GPIO Bit 0
+HKLM,"Software\TelSignal\CXTV","RemoteBit1",    0x10001, 0x09, 0x00, 0x00, 0x00 ; GPIO Bit 1
+HKLM,"Software\TelSignal\CXTV","RemoteBit2",    0x10001, 0x0A, 0x00, 0x00, 0x00 ; GPIO Bit 2
+HKLM,"Software\TelSignal\CXTV","RemoteBit3",    0x10001, 0x0B, 0x00, 0x00, 0x00 ; GPIO Bit 3
+HKLM,"Software\TelSignal\CXTV","RemoteBit4",    0x10001, 0x0C, 0x00, 0x00, 0x00 ; GPIO Bit 4
+HKLM,"Software\TelSignal\CXTV","RemoteBit5",    0x10001, 0x00, 0x00, 0x00, 0x00 ; GPIO Bit 5
+HKLM,"Software\TelSignal\CXTV","RemoteBit6",    0x10001, 0x00, 0x00, 0x00, 0x00 ; GPIO Bit 6
+HKLM,"Software\TelSignal\CXTV","RemoteBit7",    0x10001, 0x00, 0x00, 0x00, 0x00 ; GPIO Bit 7
+HKLM,"Software\TelSignal\CXTV","RemoteBitS",    0x10001, 0x0E, 0x00, 0x00, 0x00 ; GPIO Valid Bit
+HKLM,"Software\TelSignal\CXTV","RemoteBitSV",   0x10001, 0x00, 0x00, 0x00, 0x00 ; GPIO Valid Bit Value
+;
+; 64 Remote controller hardware keys mapping             H/W codes to S/W commands
+;
+HKLM,"Software\TelSignal\CXTV","RemoteKey00",   0x10001, 0x00, 0x00, 0x00, 0x00 ; Key 0
+HKLM,"Software\TelSignal\CXTV","RemoteKey01",   0x10001, 0x01, 0x00, 0x01, 0x00 ; Key 1
+HKLM,"Software\TelSignal\CXTV","RemoteKey02",   0x10001, 0x02, 0x00, 0x02, 0x00 ; Key 2
+HKLM,"Software\TelSignal\CXTV","RemoteKey03",   0x10001, 0x03, 0x00, 0x03, 0x00 ; Key 3
+HKLM,"Software\TelSignal\CXTV","RemoteKey04",   0x10001, 0x04, 0x00, 0x04, 0x00 ; Key 4
+HKLM,"Software\TelSignal\CXTV","RemoteKey05",   0x10001, 0x05, 0x00, 0x05, 0x00 ; Key 5
+HKLM,"Software\TelSignal\CXTV","RemoteKey06",   0x10001, 0x06, 0x00, 0x06, 0x00 ; Key 6
+HKLM,"Software\TelSignal\CXTV","RemoteKey07",   0x10001, 0x07, 0x00, 0x07, 0x00 ; Key 7
+HKLM,"Software\TelSignal\CXTV","RemoteKey08",   0x10001, 0x08, 0x00, 0x08, 0x00 ; Key 8
+HKLM,"Software\TelSignal\CXTV","RemoteKey09",   0x10001, 0x09, 0x00, 0x09, 0x00 ; Key 9
+HKLM,"Software\TelSignal\CXTV","RemoteKey10",   0x10001, 0x0A, 0x00, 0x11, 0x00 ; Recall, Time-Shift
+HKLM,"Software\TelSignal\CXTV","RemoteKey11",   0x10001, 0x17, 0x00, 0x17, 0x00 ; + 100
+HKLM,"Software\TelSignal\CXTV","RemoteKey12",   0x10001, 0x1A, 0x00, 0x1A, 0x00 ; CH. +
+HKLM,"Software\TelSignal\CXTV","RemoteKey13",   0x10001, 0x1E, 0x00, 0x1E, 0x00 ; CH. -
+HKLM,"Software\TelSignal\CXTV","RemoteKey14",   0x10001, 0x1B, 0x00, 0x1B, 0x00 ; Vol +
+HKLM,"Software\TelSignal\CXTV","RemoteKey15",   0x10001, 0x1F, 0x00, 0x1F, 0x00 ; Vol -
+HKLM,"Software\TelSignal\CXTV","RemoteKey16",   0x10001, 0x11, 0x00, 0x0F, 0x00 ; Source
+HKLM,"Software\TelSignal\CXTV","RemoteKey17",   0x10001, 0x10, 0x00, 0x13, 0x00 ; MTS
+HKLM,"Software\TelSignal\CXTV","RemoteKey18",   0x10001, 0x37, 0x00, 0x10, 0x00 ; FuncOSD
+HKLM,"Software\TelSignal\CXTV","RemoteKey19",   0x10001, 0x12, 0x00, 0x12, 0x00 ; Power Off
+HKLM,"Software\TelSignal\CXTV","RemoteKey20",   0x10001, 0x3A, 0x00, 0x16, 0x00 ; OSD - B.W.
+HKLM,"Software\TelSignal\CXTV","RemoteKey21",   0x10001, 0x35, 0x00, 0x14, 0x00 ; Play
+HKLM,"Software\TelSignal\CXTV","RemoteKey22",   0x10001, 0x3B, 0x00, 0x18, 0x00 ; OSD + F.F.
+HKLM,"Software\TelSignal\CXTV","RemoteKey23",   0x10001, 0x15, 0x00, 0x0C, 0x00 ; Mute
+HKLM,"Software\TelSignal\CXTV","RemoteKey24",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+HKLM,"Software\TelSignal\CXTV","RemoteKey25",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+HKLM,"Software\TelSignal\CXTV","RemoteKey26",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+HKLM,"Software\TelSignal\CXTV","RemoteKey27",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+HKLM,"Software\TelSignal\CXTV","RemoteKey28",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+HKLM,"Software\TelSignal\CXTV","RemoteKey29",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+HKLM,"Software\TelSignal\CXTV","RemoteKey30",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+HKLM,"Software\TelSignal\CXTV","RemoteKey31",   0x10001, 0x00, 0x00, 0x00, 0x00 ;
+
+;******************************************************************************
+;TelSignal EndCodes : WDM extension
+;******************************************************************************
+
+[Strings]
+InfProvider=            "ShenZhen VTImage Co., Ltd."
+Manufacture=            "ShenZhen VTImage Co., Ltd."
+DiskId=                 "VT-600 card driver disk"
+CX88VidCapture=         "10Moons SDK-2000 Video Capture"
+CX88VidTVAudio=         "VTimage, VT-600 WDM TV Audio Capture"
+CX88VidDevice=          "VTimage, VT-600 WDM Video Capture"
+CX88AudDevice=          "VTimage, VT-600 WDM Audio Capture"
+CXUnuseDevice=          "VTimage, VT-600 Unused Device"
+
+SERVICE_AUTO_START=2
+SERVICE_ERROR_NORMAL=1
+SERVICE_KERNEL_DRIVER=1
+

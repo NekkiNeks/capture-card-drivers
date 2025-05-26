@@ -1,0 +1,330 @@
+[Version]
+signature="$CHICAGO$"
+Class=Media
+ClassGUID={4d36e96c-e325-11ce-bfc1-08002be10318}
+Provider="VTImage"
+DriverVer=07/19/2018,5.0.18.6420
+CatalogFile.ntamd64=cxavsvid.cat
+
+[Manufacturer]
+"VTimage"=VTimage,NTamd64
+
+[SourceDisksNames]
+1="VTimage CX2388x X64 Driver",,,""
+
+[SourceDisksFiles]
+cxavsvid.sys=1
+
+[VTImage.NTamd64]
+%DevName.EXPERT%=CX23880.LR6611,PCI\VEN_14F1&DEV_8800&SUBSYS_45534E4F
+%CX23880.null%=NullSection,         PCI\VEN_14F1&DEV_8801
+%CX23880.null%=NullSection,         PCI\VEN_14F1&DEV_8801
+%CX23880.null%=NullSection,         PCI\VEN_14F1&DEV_8803
+%CX23880.null%=NullSection,         PCI\VEN_14F1&DEV_8804
+
+[CX23880.LR6611]
+Include=    ks.inf, kscaptur.inf, ksfilter.inf, bda.inf
+Needs=      KS.Registration,KSCAPTUR.Registration.NT,MSPCLOCK.Installation,BDA.Registration,bda.Installation.NT
+AddReg=     CX880.AddReg,XBAR.EXPERT.AddReg
+CopyFiles=  CX880.CopyDrivers
+
+[NullSection]
+
+[NullSection.Services]
+AddService = , 2  ; null service install
+
+[DestinationDirs]
+CX880.CopyDrivers=10,system32\drivers
+
+[CX880.CopyDrivers]
+cxavsvid.sys
+
+[CX880.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,cxavsvid.sys
+HKR,,OkToHibernate,3,01
+; Disable driver page out
+HKR,,PageOutWhenUnopened,3,0
+;HKR,,PageOutWhenUnopened,3,01
+HKR,,DontSuspendIfStreamsAreRunning,3,01
+HKLM,%MediaCategories%\%GUID.PINNAME_ANALOG_AUDIO_IN%,Name,,%Pin.p2AnalogAudioIn%
+HKLM,%MediaCategories%\%GUID.PINNAME_AUDIO_OUT%,Name,,%PinName.AnalogAudioOut%
+;Wave in audio device registration
+;HKR,Drivers,SubClasses,,"wave"
+;HKR,Drivers\wave\wdmaud.drv, Driver,,wdmaud.drv
+;HKR,Drivers\wave\wdmaud.drv,Description,,%AudioFriendlyName%
+;CP_METHOD_FLASH(0x03), CP_METHOD_BLACK(0x04), CP_METHOD_DEFAULT(0xFF), CP_MEOD_NONE (0xFE)
+;HKR,"DriverData","CpMethod",0x00010001, 0xFF, 0x00, 0x00, 0x00
+HKR,"DriverData","CpMethod",0x00010001, 0xFE, 0x00, 0x00, 0x00
+
+[CX880.AddReg2]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,cxavsvid.sys
+HKR,,OkToHibernate,3,01
+; Disable driver page out
+HKR,,PageOutWhenUnopened,3,0
+;HKR,,PageOutWhenUnopened,3,01
+HKR,,DontSuspendIfStreamsAreRunning,3,01
+;CP_METHOD_FLASH(0x03), CP_METHOD_BLACK(0x04), CP_METHOD_DEFAULT(0xFF), CP_MEOD_NONE (0xFE)
+;HKR,"DriverData","CpMethod",0x00010001, 0xFF, 0x00, 0x00, 0x00
+HKR,"DriverData","CpMethod",0x00010001, 0xFE, 0x00, 0x00, 0x00
+;-------------------------------------------------------------------
+; Crossbar AddReg sections
+;
+;---Crossbar registry values---
+;
+; Note: For each pin on the crossbar, specify the following:
+; (1) Pin type 
+;     0 - SVIDEO
+;     1 - Tuner
+;     2 - Composite
+;     3 - 656
+;     4 - audio tuner in
+;     5 - audio line in
+; (2) InputMux (optional) - input mux to use for the selected pin
+; (3) RelatedPinIndex 
+; (4) GPIOMask (optional) - Mask specifying which GPIO bits to set or clear
+; (5) GPIOSettings (optional) - Settings for GPIO bits specified in the mask 
+
+;-------------------------------------------------------------------
+[XBAR.EXPERT.AddReg]
+;Pin 0 - Tuner In
+HKR,"DriverData\XBarPin0","PinType",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin0","InputMux",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin0","RelatedPinIndex",0x00010001, 0x03,0x00,0x00,0x00
+
+;Pin 1 - Composite in
+HKR,"DriverData\XBarPin1","PinType",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","InputMux",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","RelatedPinIndex",0x00010001, 0x04,0x00,0x00,0x00
+
+;Pin 2 - S-Video in
+HKR,"DriverData\XBarPin2","PinType",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","InputMux",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","RelatedPinIndex",0x00010001, 0x04,0x00,0x00,0x00
+
+;Pin 3 - Tuner Audio : GPIO 2, 12,13
+HKR,"DriverData\XBarPin3","PinType",0x00010001, 0x04,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","RelatedPinIndex",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","GPIOMask",0x00010001, 0x04,0x30,0x00,0x00
+HKR,"DriverData\XBarPin3","GPIOSettings",0x00010001, 0x00,0x20,0x00,0x0
+
+;Pin 4 - Audio Line in : GPIO 2, 12,13
+HKR,"DriverData\XBarPin4","PinType",0x00010001, 0x05,0x00,0x00,0x00
+HKR,"DriverData\XBarPin4","RelatedPinIndex",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin4","GPIOMask",0x00010001, 0x04,0x30,0x00,0x00
+HKR,"DriverData\XBarPin4","GPIOSettings",0x00010001, 0x00,0x00,0x00,0x00
+
+;Tuner input is the default
+HKR,"DriverData","VideoInputPin",0x00010001, 0x00,0x00,0x00,0x00
+
+[XBAR.AddReg]
+;Pin 0 - Tuner In
+HKR,"DriverData\XBarPin0","PinType",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin0","InputMux",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin0","RelatedPinIndex",0x00010001, 0x03,0x00,0x00,0x00
+
+;Pin 1 - Composite in
+HKR,"DriverData\XBarPin1","PinType",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","InputMux",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","RelatedPinIndex",0x00010001, 0xFF,0xFF,0xFF,0xFF
+
+;Pin 2 - S-Video in
+HKR,"DriverData\XBarPin2","PinType",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","InputMux",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","RelatedPinIndex",0x00010001, 0xFF,0xFF,0xFF,0xFF
+
+;Pin 3 - Tuner Audio
+HKR,"DriverData\XBarPin3","PinType",0x00010001, 0x04,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","RelatedPinIndex",0x00010001, 0x00,0x00,0x00,0x00
+
+;Tuner input is the default
+HKR,"DriverData","VideoInputPin",0x00010001, 0x00,0x00,0x00,0x00
+
+[XBAR_Dual2.AddReg]
+;Pin 0 - Tuner In
+HKR,"DriverData\XBarPin0","PinType",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin0","InputMux",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin0","RelatedPinIndex",0x00010001, 0x05,0x00,0x00,0x00
+
+;Pin 1 - Composite 1
+HKR,"DriverData\XBarPin1","PinType",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","InputMux",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","RelatedPinIndex",0x00010001, 0x06,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","GPIOMask",0x00010001, 0x80,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","GPIOSettings",0x00010001, 0x80,0x00,0x00,0x00
+
+;Pin 2 - Composite 2
+HKR,"DriverData\XBarPin2","PinType",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","InputMux",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","RelatedPinIndex",0x00010001, 0x07,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","GPIOMask",0x00010001, 0x80,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","GPIOSettings",0x00010001, 0x00,0x00,0x00,0x00
+
+;Pin 3 - S-Video 1
+HKR,"DriverData\XBarPin3","PinType",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","InputMux",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","RelatedPinIndex",0x00010001, 0x06,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","GPIOMask",0x00010001, 0x80,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","GPIOSettings",0x00010001, 0x80,0x00,0x00,0x00
+
+;Pin 4 - S-Video 2
+HKR,"DriverData\XBarPin4","PinType",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin4","InputMux",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin4","RelatedPinIndex",0x00010001, 0x07,0x00,0x00,0x00
+HKR,"DriverData\XBarPin4","GPIOMask",0x00010001, 0x80,0x00,0x00,0x00
+HKR,"DriverData\XBarPin4","GPIOSettings",0x00010001, 0x00,0x00,0x00,0x00
+
+;Pin 5 - Tuner Audio
+HKR,"DriverData\XBarPin5","PinType",0x00010001, 0x04,0x00,0x00,0x00
+HKR,"DriverData\XBarPin5","RelatedPinIndex",0x00010001, 0x00,0x00,0x00,0x00
+
+;Pin 6 - Audio Line in 1
+HKR,"DriverData\XBarPin6","PinType",0x00010001, 0x05,0x00,0x00,0x00
+HKR,"DriverData\XBarPin6","RelatedPinIndex",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin6","GPIOMask",0x00010001, 0x03,0x00,0x00,0x00
+HKR,"DriverData\XBarPin6","GPIOSettings",0x00010001, 0x01,0x00,0x00,0x00
+
+;Pin 7 - Audio Line in 2
+HKR,"DriverData\XBarPin7","PinType",0x00010001, 0x05,0x00,0x00,0x00
+HKR,"DriverData\XBarPin7","RelatedPinIndex",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin7","GPIOMask",0x00010001, 0x03,0x00,0x00,0x00
+HKR,"DriverData\XBarPin7","GPIOSettings",0x00010001, 0x03,0x00,0x00,0x00
+;-------------------------------------------------------------------
+; AddReg sections for TS filter
+;-------------------------------------------------------------------
+
+[CXTS.AddReg]
+HKLM,System\CurrentControlSet\Control\MediaCategories\%TSPinID%,Display,1, 00,00,00,00
+HKLM,System\CurrentControlSet\Control\MediaCategories\%TSPinID%,Name,,%TSPinName%
+
+;
+; Interfaces installation
+;
+
+;
+; Video
+;
+[CX23880.LR6611.Interfaces]
+Needs=EXPERT.Interfaces
+
+[VID.Interfaces]
+AddInterface={65e8773d-8f56-11d0-a3b9-00a0c9223196},%KsNameFilter%,VID_Interface,
+AddInterface={a799a802-a46d-11d0-a18c-00a02401dcd4},%TVAudioReferenceGuid%,TvAudio_Interface,
+AddInterface={a799a801-a46d-11d0-a18c-00a02401dcd4},%XBARReferenceGUID%,CX88XBAR_Interface,
+AddInterface={a799a800-a46d-11d0-a18c-00a02401dcd4},%TunerReferenceGuid%,CX88TUNE_Interface,
+;;AddInterface={6994AD04-93EF-11D0-A3CC-00A0C9223196},%AudioReferenceGuid%,AUD_Interface,
+AddInterface={71985F48-1CA1-11d3-9CC8-00C04F7971E0},%BDATuneReferenceGuid%,BDATUNE_Interface,
+AddInterface={FD0A5AF4-B41D-11d2-9C95-00C04F7971E0},%TSReferenceGuid%,TS_Interface
+
+[BDA.Interfaces]
+AddInterface={65e8773d-8f56-11d0-a3b9-00a0c9223196},%KsNameFilter%,VID_Interface,
+AddInterface={a799a802-a46d-11d0-a18c-00a02401dcd4},%TVAudioReferenceGuid%,TvAudio_Interface,
+AddInterface={a799a801-a46d-11d0-a18c-00a02401dcd4},%XBARReferenceGUID%,CX88XBAR_Interface,
+AddInterface={71985F48-1CA1-11d3-9CC8-00C04F7971E0},%BDATuneReferenceGuid%,BDATUNE_Interface,
+AddInterface={FD0A5AF4-B41D-11d2-9C95-00C04F7971E0},%TSReferenceGuid%,TS_Interface
+
+[EXPERT.Interfaces]
+AddInterface={65e8773d-8f56-11d0-a3b9-00a0c9223196},%KsNameFilter%,EXPERT_VID_Interface,
+AddInterface={a799a802-a46d-11d0-a18c-00a02401dcd4},%TVAudioReferenceGuid%,EXPERT_TvAudio_Interface,
+AddInterface={a799a801-a46d-11d0-a18c-00a02401dcd4},%XBARReferenceGUID%,EXPERT_CX88XBAR_Interface,
+AddInterface={a799a800-a46d-11d0-a18c-00a02401dcd4},%TunerReferenceGuid%,EXPERT_CX88TUNE_Interface,
+
+[DV2000_CX88XBAR_Interface]
+AddReg=DV2000_CX88XBAR_Interface.AddReg
+
+[DV2000_CX88XBAR_Interface.AddReg]
+HKR,,CLSID,,{71F96460-78F3-11d0-A18C-00A0C9118956}
+HKR,,FriendlyName,,%DV2000_XBARFriendlyName%
+
+[DV2000_CX88TUNE_Interface]
+AddReg=DV2000_CX88TUNE_Interface.AddReg
+
+[DV2000_CX88TUNE_Interface.AddReg]
+HKR,,CLSID,,{266EEE40-6C63-11cf-8A03-00AA006ECB65}
+HKR,,FriendlyName,,%DV2000_TunerFriendlyName%
+
+;; EXPERT
+[EXPERT_VID_Interface]
+AddReg=EXPERT_VID_Interface.AddReg
+
+[EXPERT_VID_Interface.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%       ; {17CCA71B-ECD7-11D0-B908-00A0C9223196}
+HKR,,FriendlyName,,%EXPERT_VIDFriendlyName%
+
+[EXPERT_TvAudio_Interface]
+AddReg=EXPERT_TvAudio_Interface.AddReg
+
+[EXPERT_TvAudio_Interface.AddReg]
+HKR,,CLSID,,{71F96462-78F3-11d0-A18C-00A0C9118956}
+HKR,,FriendlyName,,%EXPERT_TVAudioFriendlyName%
+
+[EXPERT_CX88XBAR_Interface]
+AddReg=EXPERT_CX88XBAR_Interface.AddReg
+
+[EXPERT_CX88XBAR_Interface.AddReg]
+HKR,,CLSID,,{71F96460-78F3-11d0-A18C-00A0C9118956}
+HKR,,FriendlyName,,%EXPERT_XBARFriendlyName%
+
+
+;; Original 
+[VID_Interface]
+AddReg=VID_Interface.AddReg
+
+[VID_Interface.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%       ; {17CCA71B-ECD7-11D0-B908-00A0C9223196}
+HKR,,FriendlyName,,%VIDFriendlyName%
+
+
+[CX88XBAR_Interface]
+AddReg=CX88XBAR_Interface.AddReg
+
+[CX88XBAR_Interface.AddReg]
+HKR,,CLSID,,{71F96460-78F3-11d0-A18C-00A0C9118956}
+HKR,,FriendlyName,,%XBARFriendlyName%
+
+
+;
+; Services installation
+
+[CX23880.LR6611.Services]
+AddService = CX88VID,2,VID.ServiceInstall
+
+
+[VID.ServiceInstall]
+DisplayName   = %CX23880.DeviceDesc%
+ServiceType   = 1
+StartType     = 3
+ErrorControl  = 1
+ServiceBinary = %10%\system32\drivers\cxavsvid.sys
+
+;---------------------------------------------------------------
+;                S t r i n g s
+;---------------------------------------------------------------
+
+[Strings]
+KsNameFilter                 = "{9B365890-165F-11D0-A195-0020AFD156E4}"
+Proxy.CLSID                  = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+DevName.EXPERT               = "VTimage, VT-600EX Capture"
+CX23880.DeviceDesc           = "VTimage CX2388x AvStream Driver"
+;;;VIDFriendlyName
+EXPERT_VIDFriendlyName       = "VTimage,VT-600EX WDM Video Capture"
+;
+CX23880.null                 = "VTimage Dummy Device"
+;
+CX23880.8811                = "VTimage CX23881/CX23882 Device (Audio)"
+CX23880.8801                = "VTimage CX23880/CX23883 Device (Audio)"
+
+MediaCategories              = "SYSTEM\CurrentControlSet\Control\MediaCategories"
+GUID.PINNAME_ANALOG_AUDIO_IN = "{04394D28-52A7-4c46-AED0-65D62CC64DA6}"
+Pin.p2AnalogAudioIn          = "Analog Audio In"
+GUID.PINNAME_AUDIO_OUT       = "{9DA02733-7910-40f2-95DD-0441676C9A9B}"
+PinName.AnalogAudioOut       = "Audio Out"
+AudioFriendlyName            = "VTimage,VT-600ex WDM Audio Capture"
+AudioReferenceGuid           = "{AB766B70-AFB3-4461-A4DE-22E9C516B7FE}"
+EXPERT_TVAudioFriendlyName   = "VTimage,VT-600ex WDM TV Audio."
+XBARFriendlyName             = "VTimage CX2388x WDM Crossbar"
+EXPERT_XBARFriendlyName      = "VTimage,VT-600ex WDM Crossbar."
+XBARReferenceGUID            = "{77F656DA-696D-407c-BA1C-50E4457C12E8}"
+
+
