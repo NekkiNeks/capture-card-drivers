@@ -60,4 +60,4 @@ But if you want advanced features, you can try this one.
 
 [For Windows](https://github.com/JuniorIsAJitterbug/cxadc-win) — If you want to use the CXADC driver on Windows, make sure to remove the driver from this repo first.
 
-You may run into driver signature issues — if so, try enabling Test Mode or temporarily disabling driver signature enforcement. Also you will need to build it from source, you can use either **github actions** for that (but you will need to fork that repo first) or do it on your PC.
+> You may run into driver signature issues on Windows — if so, try enabling Windows Test Mode or temporarily disabling driver signature enforcement. Also you will need to build it from source, you can use either **github actions** for that (but you will need to fork that repo first) or do it on your PC.
